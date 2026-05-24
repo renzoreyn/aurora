@@ -14,6 +14,7 @@ import {
   Sparkles,
   Users,
   Zap,
+  type LucideIcon,
 } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, type ReactNode } from "react";
@@ -23,6 +24,14 @@ import { cn } from "@/lib/utils";
 
 const navItems = ["Blog", "Changelog", "Pricing", "About", "Careers"];
 const brands = ["NOVA", "Buildbox", "Fourpoints", "Orbit", "Codecraft", "Pictel"];
+const sidebarItems: Array<[LucideIcon, string, boolean?]> = [
+  [Zap, "Quick Create", true],
+  [LayoutDashboard, "Dashboard"],
+  [Link2, "Lifecycle"],
+  [Activity, "Analytics"],
+  [FileText, "Projects"],
+  [Users, "Team"],
+];
 
 const cards = [
   {
@@ -339,14 +348,7 @@ function DashboardMockup() {
         </div>
         <div className="grid min-h-[420px] md:grid-cols-[170px_1fr]">
           <aside className="hidden border-r border-white/8 bg-white/[0.02] p-3 md:block">
-            {[
-              [Zap, "Quick Create", true],
-              [LayoutDashboard, "Dashboard"],
-              [Link2, "Lifecycle"],
-              [Activity, "Analytics"],
-              [FileText, "Projects"],
-              [Users, "Team"],
-            ].map(([Icon, label, active]) => (
+            {sidebarItems.map(([Icon, label, active]) => (
               <div
                 key={String(label)}
                 className={cn(
