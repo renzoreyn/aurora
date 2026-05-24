@@ -70,14 +70,16 @@ body {
 .aurora-panel::before {
   content: "";
   position: absolute;
-  inset: -45% -12%;
+  inset: -80% -35%;
   background:
-    radial-gradient(ellipse at 25% 35%, rgba(76, 29, 149, 0.72), transparent 28%),
-    radial-gradient(ellipse at 58% 50%, rgba(124, 58, 237, 0.62), transparent 24%),
-    radial-gradient(ellipse at 86% 35%, rgba(168, 85, 247, 0.82), transparent 25%),
-    radial-gradient(ellipse at 40% 72%, rgba(0, 0, 0, 0.9), transparent 26%);
-  filter: blur(24px);
-  animation: slow-aurora 18s ease-in-out infinite;
+    radial-gradient(ellipse at 18% 48%, rgba(0, 0, 0, 0.92), transparent 24%),
+    radial-gradient(ellipse at 34% 34%, rgba(76, 29, 149, 0.9), transparent 24%),
+    radial-gradient(ellipse at 58% 50%, rgba(124, 58, 237, 0.78), transparent 22%),
+    radial-gradient(ellipse at 82% 38%, rgba(192, 132, 252, 0.88), transparent 24%),
+    radial-gradient(ellipse at 50% 72%, rgba(0, 0, 0, 0.82), transparent 24%);
+  background-size: 140% 140%;
+  filter: blur(20px);
+  animation: slow-aurora 8s ease-in-out infinite;
 }
 
 .aurora-panel::after {
@@ -107,12 +109,15 @@ body {
 @keyframes slow-aurora {
   0%,
   100% {
-    transform: translate3d(-3%, -2%, 0) scale(1);
+    transform: translate3d(-12%, -8%, 0) scale(1) rotate(-2deg);
+    opacity: 0.72;
   }
-  40% {
-    transform: translate3d(4%, 3%, 0) scale(1.06);
+  32% {
+    transform: translate3d(8%, 8%, 0) scale(1.18) rotate(3deg);
+    opacity: 0.95;
   }
-  70% {
-    transform: translate3d(-1%, 5%, 0) scale(0.98);
+  66% {
+    transform: translate3d(-4%, 14%, 0) scale(0.98) rotate(-4deg);
+    opacity: 0.82;
   }
 }

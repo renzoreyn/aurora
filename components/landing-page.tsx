@@ -627,27 +627,59 @@ function OrbitDot({
 
 function HeroAurora() {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[660px] overflow-hidden">
-      <motion.div
-        animate={{
-          x: ["-11%", "10%", "-6%", "7%", "-11%"],
-          y: ["-12%", "-2%", "-16%", "-5%", "-12%"],
-          scale: [1, 1.14, 0.96, 1.08, 1],
-          rotate: [0, 2, -3, 1, 0],
-        }}
-        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute left-1/2 top-[-260px] h-[650px] w-[165vw] min-w-[1500px] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.96)_0%,rgba(124,58,237,0.74)_27%,rgba(76,29,149,0.42)_48%,rgba(0,0,0,0)_74%)] blur-2xl"
-      />
-      <motion.div
-        animate={{
-          opacity: [0.28, 0.72, 0.38, 0.64, 0.28],
-          x: ["12%", "-10%", "7%", "-4%", "12%"],
-          y: ["0%", "8%", "-5%", "4%", "0%"],
-          scale: [0.96, 1.16, 1.02, 1.1, 0.96],
-        }}
-        transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute left-1/2 top-[-185px] h-[560px] w-[118vw] min-w-[1120px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(192,132,252,0.78)_0%,rgba(88,28,135,0.46)_42%,rgba(0,0,0,0)_72%)] blur-3xl"
-      />
+    <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[690px] overflow-hidden">
+      <motion.svg
+        viewBox="0 0 1600 620"
+        preserveAspectRatio="none"
+        className="absolute left-1/2 top-[-210px] h-[620px] w-[150vw] min-w-[1500px] -translate-x-1/2 opacity-90"
+        animate={{ x: ["-5%", "4%", "-3%", "6%", "-5%"], y: ["-4%", "3%", "-2%", "5%", "-4%"], scaleX: [1, 1.08, 0.98, 1.04, 1] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <defs>
+          <linearGradient id="aurora-wave" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stopColor="rgba(76,29,149,0)" />
+            <stop offset="18%" stopColor="rgba(109,40,217,0.6)" />
+            <stop offset="50%" stopColor="rgba(192,132,252,0.96)" />
+            <stop offset="82%" stopColor="rgba(124,58,237,0.64)" />
+            <stop offset="100%" stopColor="rgba(76,29,149,0)" />
+          </linearGradient>
+          <filter id="wave-blur" x="-20%" y="-60%" width="140%" height="220%">
+            <feGaussianBlur stdDeviation="34" />
+          </filter>
+        </defs>
+        <motion.path
+          d="M-120 285 C 180 145 390 105 650 190 C 910 275 1120 245 1390 105 C 1530 32 1665 54 1730 88"
+          animate={{
+            d: [
+              "M-120 285 C 180 145 390 105 650 190 C 910 275 1120 245 1390 105 C 1530 32 1665 54 1730 88",
+              "M-120 245 C 170 88 410 170 650 118 C 910 62 1110 290 1390 155 C 1540 82 1660 16 1730 64",
+              "M-120 285 C 180 145 390 105 650 190 C 910 275 1120 245 1390 105 C 1530 32 1665 54 1730 88",
+            ],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          fill="none"
+          stroke="url(#aurora-wave)"
+          strokeWidth="260"
+          strokeLinecap="round"
+          filter="url(#wave-blur)"
+        />
+        <motion.path
+          d="M-80 330 C 260 210 420 260 690 205 C 960 150 1100 190 1350 270 C 1510 322 1640 230 1710 172"
+          animate={{
+            d: [
+              "M-80 330 C 260 210 420 260 690 205 C 960 150 1100 190 1350 270 C 1510 322 1640 230 1710 172",
+              "M-80 285 C 240 350 430 170 700 250 C 940 322 1135 112 1360 215 C 1510 284 1620 310 1710 206",
+              "M-80 330 C 260 210 420 260 690 205 C 960 150 1100 190 1350 270 C 1510 322 1640 230 1710 172",
+            ],
+          }}
+          transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+          fill="none"
+          stroke="rgba(88,28,135,0.55)"
+          strokeWidth="170"
+          strokeLinecap="round"
+          filter="url(#wave-blur)"
+        />
+      </motion.svg>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#030403]/35 to-[#030403]" />
     </div>
   );
@@ -657,32 +689,15 @@ function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <a href="#" className="flex items-center gap-2 text-white">
       <span className={cn("grid place-items-center rounded-full bg-white text-black", compact ? "h-5 w-5" : "h-6 w-6")}>
-        <LogoMark className={cn(compact ? "h-3.5 w-3.5" : "h-4 w-4")} />
+        <img
+          src="/aurora-logo.svg"
+          alt=""
+          aria-hidden="true"
+          className={cn("object-contain", compact ? "h-3.5 w-3.5" : "h-4 w-4")}
+        />
       </span>
       <span className={cn("font-display font-medium tracking-[-0.04em]", compact ? "text-sm" : "text-base")}>Aurora</span>
     </a>
-  );
-}
-
-function LogoMark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 512 512" aria-hidden="true" className={className}>
-      <path
-        d="M91 420L225.22 91.54C236.61 63.66 275.39 63.66 286.78 91.54L421 420"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="76"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M177 318H335"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="68"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }
 
