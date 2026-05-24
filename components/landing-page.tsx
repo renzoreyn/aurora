@@ -5,7 +5,6 @@ import Image from "next/image";
 import {
   Activity,
   CalendarDays,
-  Command,
   Database,
   FileText,
   LayoutDashboard,
@@ -536,28 +535,19 @@ function FeatureVisual({ type, isHovered = false }: { type: string; isHovered?: 
         {[180, 144, 108, 72].map((size) => (
           <div key={size} className="absolute rounded-full border border-white/7" style={{ height: size, width: size }} />
         ))}
-        <motion.div
-          className="absolute inset-0"
-          animate={{ opacity: isHovered ? 0 : 1, scale: isHovered ? 0.96 : 1 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <OrbitDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" angle={252} duration={18} radius={90} size={16} />
-          <OrbitDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" angle={112} duration={14} radius={72} size={14} />
-          <OrbitDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" angle={18} duration={11} radius={54} size={11} />
-          <OrbitDot className="bg-violet-200/90" angle={138} duration={9} radius={36} size={8} />
-        </motion.div>
-        <motion.div
-          className="absolute inset-0"
-          animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 1.04 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <OrbitLaneDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" radius={90} size={16} />
-          <OrbitLaneDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" radius={72} size={14} />
-          <OrbitLaneDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" radius={54} size={11} />
-          <OrbitLaneDot className="bg-violet-200/90" radius={36} size={8} />
-        </motion.div>
+        <OrbitDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" angle={252} duration={18} isHovered={isHovered} radius={90} size={16} />
+        <OrbitDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" angle={112} duration={14} isHovered={isHovered} radius={72} size={14} />
+        <OrbitDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" angle={18} duration={11} isHovered={isHovered} radius={54} size={11} />
+        <OrbitDot className="bg-violet-200/90" angle={138} duration={9} isHovered={isHovered} radius={36} size={8} />
         <div className="z-10 grid h-12 w-12 place-items-center rounded-full bg-[#0b0b0b] ring-1 ring-white/10 transition duration-500 group-hover:scale-105">
-          <Command className="h-5 w-5 text-white/80" />
+          <Image
+            width={22}
+            height={22}
+            src="/aurora-logo.png"
+            alt=""
+            aria-hidden="true"
+            className="h-5 w-5 object-contain"
+          />
         </div>
       </div>
     );
@@ -618,12 +608,14 @@ function FeatureVisual({ type, isHovered = false }: { type: string; isHovered?: 
 function OrbitDot({
   angle,
   duration,
+  isHovered,
   radius,
   size,
   className,
 }: {
   angle: number;
   duration: number;
+  isHovered: boolean;
   radius: number;
   size: number;
   className?: string;
@@ -636,38 +628,12 @@ function OrbitDot({
     >
       <motion.span
         className={cn("absolute rounded-full", className)}
-        style={{
-          width: size,
-          height: size,
-          marginLeft: -size / 2,
-          marginTop: -size / 2,
-          transform: `translateY(-${radius}px)`,
+        animate={{
+          backgroundColor: isHovered ? "rgb(196 181 253)" : undefined,
+          boxShadow: isHovered ? "0 0 22px rgba(196,181,253,0.78)" : undefined,
+          scale: isHovered ? 1.12 : 1,
         }}
-      />
-    </motion.span>
-  );
-}
-
-function OrbitLaneDot({
-  radius,
-  size,
-  className,
-}: {
-  radius: number;
-  size: number;
-  className?: string;
-}) {
-  return (
-    <motion.span
-      className="absolute left-1/2 top-1/2"
-      animate={{ rotate: [0, 360] }}
-      transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
-    >
-      <motion.span
-        className={cn("absolute rounded-full", className)}
-        initial={false}
-        animate={{ scale: 1.16 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         style={{
           width: size,
           height: size,
