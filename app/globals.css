@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --background: #030403;
+  --foreground: #f7f7f2;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist);
+  --font-display: var(--font-space);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --animate-accordion-down: accordion-down 0.28s ease-out;
+  --animate-accordion-up: accordion-up 0.24s ease-out;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #030403;
+  scroll-behavior: auto;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% -18rem, rgba(20, 184, 166, 0.16), transparent 34rem),
+    #030403;
+  color: var(--foreground);
+}
+
+::selection {
+  background: rgba(45, 212, 191, 0.36);
+  color: white;
+}
+
+.grain-layer {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.42;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+.aurora-panel::before {
+  content: "";
+  position: absolute;
+  inset: -45% -12%;
+  background:
+    radial-gradient(ellipse at 25% 35%, rgba(6, 78, 59, 0.72), transparent 28%),
+    radial-gradient(ellipse at 58% 50%, rgba(20, 184, 166, 0.62), transparent 24%),
+    radial-gradient(ellipse at 86% 35%, rgba(45, 212, 191, 0.82), transparent 25%),
+    radial-gradient(ellipse at 40% 72%, rgba(0, 0, 0, 0.9), transparent 26%);
+  filter: blur(24px);
+  animation: slow-aurora 18s ease-in-out infinite;
+}
+
+.aurora-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(3, 4, 3, 0.88), rgba(3, 4, 3, 0.18), rgba(3, 4, 3, 0.1));
+}
+
+.section-pill {
+  display: inline-flex;
+  border-radius: 6px;
+  border: 1px solid rgba(45, 212, 191, 0.12);
+  background: rgba(45, 212, 191, 0.1);
+  padding: 4px 7px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(153, 246, 228, 0.82);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@keyframes slow-aurora {
+  0%,
+  100% {
+    transform: translate3d(-3%, -2%, 0) scale(1);
+  }
+  40% {
+    transform: translate3d(4%, 3%, 0) scale(1.06);
+  }
+  70% {
+    transform: translate3d(-1%, 5%, 0) scale(0.98);
+  }
+}
