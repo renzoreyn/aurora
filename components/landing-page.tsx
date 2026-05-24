@@ -141,21 +141,23 @@ function TopNav() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease: "easeOut" }}
       className={cn(
-        "fixed left-1/2 z-50 flex -translate-x-1/2 items-center justify-between rounded-xl border px-3 py-2 backdrop-blur-xl transition-[width,top,background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        "fixed left-1/2 z-50 flex -translate-x-1/2 items-center justify-between rounded-xl border backdrop-blur-xl transition-[width,top,padding,background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
         isCompact
-          ? "top-3.5 w-[min(760px,calc(100%-32px))] border-white/8 bg-[#101010]/95 shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
-          : "top-5 w-[min(920px,calc(100%-32px))] border-white/0 bg-[#101010]/0 shadow-none",
+          ? "top-3 w-[min(560px,calc(100%-32px))] border-white/8 bg-[#101010]/95 px-2 py-1.5 shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
+          : "top-5 w-[min(920px,calc(100%-32px))] border-white/0 bg-[#101010]/0 px-3 py-2 shadow-none",
       )}
     >
-      <Logo />
-      <nav className="hidden items-center gap-7 text-[13px] text-white/68 md:flex">
+      <Logo compact={isCompact} />
+      <nav className={cn("hidden items-center text-white/68 transition-all duration-300 md:flex", isCompact ? "gap-4 text-[11px]" : "gap-7 text-[13px]")}>
         {navItems.map((item) => (
           <a key={item} href={`#${item.toLowerCase()}`} className="transition hover:text-white">
             {item}
           </a>
         ))}
       </nav>
-      <Button className="h-8 rounded-lg bg-white px-4 text-xs text-black hover:bg-white/90">Join waitlist</Button>
+      <Button className={cn("rounded-lg bg-white text-xs text-black hover:bg-white/90", isCompact ? "h-7 px-3" : "h-8 px-4")}>
+        Join waitlist
+      </Button>
     </motion.header>
   );
 }
@@ -628,16 +630,22 @@ function HeroAurora() {
     <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[660px] overflow-hidden">
       <motion.div
         animate={{
-          x: ["-4%", "3%", "-2%", "-4%"],
-          y: ["-10%", "-4%", "-12%", "-10%"],
-          scale: [1, 1.05, 0.99, 1],
+          x: ["-11%", "10%", "-6%", "7%", "-11%"],
+          y: ["-12%", "-2%", "-16%", "-5%", "-12%"],
+          scale: [1, 1.14, 0.96, 1.08, 1],
+          rotate: [0, 2, -3, 1, 0],
         }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
         className="absolute left-1/2 top-[-260px] h-[650px] w-[165vw] min-w-[1500px] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.96)_0%,rgba(124,58,237,0.74)_27%,rgba(76,29,149,0.42)_48%,rgba(0,0,0,0)_74%)] blur-2xl"
       />
       <motion.div
-        animate={{ opacity: [0.34, 0.58, 0.42, 0.34], x: ["5%", "-3%", "4%", "5%"] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        animate={{
+          opacity: [0.28, 0.72, 0.38, 0.64, 0.28],
+          x: ["12%", "-10%", "7%", "-4%", "12%"],
+          y: ["0%", "8%", "-5%", "4%", "0%"],
+          scale: [0.96, 1.16, 1.02, 1.1, 0.96],
+        }}
+        transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
         className="absolute left-1/2 top-[-185px] h-[560px] w-[118vw] min-w-[1120px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(192,132,252,0.78)_0%,rgba(88,28,135,0.46)_42%,rgba(0,0,0,0)_72%)] blur-3xl"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#030403]/35 to-[#030403]" />
