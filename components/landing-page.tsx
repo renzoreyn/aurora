@@ -1,6 +1,7 @@
 "use client";
 
 import Lenis from "lenis";
+import Image from "next/image";
 import {
   Activity,
   CalendarDays,
@@ -215,26 +216,36 @@ function Features() {
       </Reveal>
       <div className="mt-8 grid gap-4 lg:grid-cols-3">
         {cards.map((card, index) => (
-          <Reveal key={card.title} delay={index * 0.08}>
-            <motion.article
-              whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 260, damping: 20 }}
-              className="group relative min-h-[315px] overflow-hidden rounded-lg border border-white/8 bg-[#151515] shadow-[0_18px_60px_rgba(0,0,0,0.25)]"
-            >
-              <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-white/[0.04] to-transparent" />
-              <FeatureVisual type={card.visual} />
-              <motion.div className="absolute inset-x-0 bottom-0 border-t border-white/6 bg-[#151515]/92 p-5 backdrop-blur transition duration-500 group-hover:bg-[#181224]/94">
-                <div className="mb-3 flex items-center gap-2 text-sm font-medium transition duration-500 group-hover:-translate-y-1">
-                  <card.icon className="h-4 w-4 text-violet-300/85 transition duration-500 group-hover:scale-110" />
-                  {card.title}
-                </div>
-                <p className="max-w-sm text-[13px] leading-5 text-white/42 transition duration-500 group-hover:-translate-y-1 group-hover:text-white/58">{card.body}</p>
-              </motion.div>
-            </motion.article>
-          </Reveal>
+          <FeatureCard key={card.title} card={card} delay={index * 0.08} />
         ))}
       </div>
     </Section>
+  );
+}
+
+function FeatureCard({ card, delay }: { card: (typeof cards)[number]; delay: number }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Reveal delay={delay}>
+      <motion.article
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+        whileHover={{ y: -5 }}
+        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        className="group relative min-h-[315px] overflow-hidden rounded-lg border border-white/8 bg-[#151515] shadow-[0_18px_60px_rgba(0,0,0,0.25)]"
+      >
+        <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-white/[0.04] to-transparent" />
+        <FeatureVisual type={card.visual} isHovered={isHovered} />
+        <motion.div className="absolute inset-x-0 bottom-0 border-t border-white/6 bg-[#151515]/92 p-5 backdrop-blur transition duration-500 group-hover:bg-[#181224]/94">
+          <div className="mb-3 flex items-center gap-2 text-sm font-medium transition duration-500 group-hover:-translate-y-1">
+            <card.icon className="h-4 w-4 text-violet-300/85 transition duration-500 group-hover:scale-110" />
+            {card.title}
+          </div>
+          <p className="max-w-sm text-[13px] leading-5 text-white/42 transition duration-500 group-hover:-translate-y-1 group-hover:text-white/58">{card.body}</p>
+        </motion.div>
+      </motion.article>
+    </Reveal>
   );
 }
 
@@ -517,28 +528,16 @@ function ChartPanel({ title }: { title: string }) {
   );
 }
 
-function FeatureVisual({ type }: { type: string }) {
+function FeatureVisual({ type, isHovered = false }: { type: string; isHovered?: boolean }) {
   if (type === "orbit") {
     return (
       <div className="absolute inset-x-0 top-0 flex h-52 items-center justify-center overflow-hidden">
         <div className="absolute h-48 w-48 rounded-full border border-white/7" />
         <div className="absolute h-32 w-32 rounded-full border border-white/7" />
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-          className="absolute h-48 w-48 rounded-full"
-        >
-          <OrbitDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" angle={252} radius={96} size={16} />
-          <OrbitDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" angle={112} radius={96} size={14} />
-        </motion.div>
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-          className="absolute h-32 w-32 rounded-full"
-        >
-          <OrbitDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" angle={18} radius={64} size={11} />
-          <OrbitDot className="bg-violet-200/90" angle={138} radius={64} size={8} />
-        </motion.div>
+        <OrbitDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" angle={252} duration={18} hoverX={-42} isHovered={isHovered} radius={88} size={16} />
+        <OrbitDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" angle={112} duration={14} hoverX={-14} isHovered={isHovered} radius={88} size={14} />
+        <OrbitDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" angle={18} duration={11} hoverX={14} isHovered={isHovered} radius={58} size={11} />
+        <OrbitDot className="bg-violet-200/90" angle={138} duration={9} hoverX={42} isHovered={isHovered} radius={58} size={8} />
         <div className="z-10 grid h-12 w-12 place-items-center rounded-full bg-[#0b0b0b] ring-1 ring-white/10 transition duration-500 group-hover:scale-105">
           <Command className="h-5 w-5 text-white/80" />
         </div>
@@ -600,28 +599,43 @@ function FeatureVisual({ type }: { type: string }) {
 
 function OrbitDot({
   angle,
+  duration,
+  hoverX,
+  isHovered,
   radius,
   size,
   className,
 }: {
   angle: number;
+  duration: number;
+  hoverX: number;
+  isHovered: boolean;
   radius: number;
   size: number;
   className?: string;
 }) {
-  const radians = (angle * Math.PI) / 180;
-  const x = Math.cos(radians) * radius;
-  const y = Math.sin(radians) * radius;
-
   return (
-    <span
-      className={cn("absolute left-1/2 top-1/2 rounded-full transition duration-500 group-hover:scale-125", className)}
-      style={{
-        width: size,
-        height: size,
-        transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
-      }}
-    />
+    <motion.span
+      className="absolute left-1/2 top-1/2"
+      animate={{ rotate: isHovered ? 0 : [angle, angle + 360] }}
+      transition={isHovered ? { duration: 0.45, ease: [0.16, 1, 0.3, 1] } : { duration, repeat: Infinity, ease: "linear" }}
+    >
+      <motion.span
+        className={cn("absolute rounded-full", className)}
+        animate={{
+          x: isHovered ? hoverX : 0,
+          y: isHovered ? 0 : -radius,
+          scale: isHovered ? 1.2 : 1,
+        }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          width: size,
+          height: size,
+          marginLeft: -size / 2,
+          marginTop: -size / 2,
+        }}
+      />
+    </motion.span>
   );
 }
 
@@ -689,8 +703,10 @@ function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <a href="#" className="flex items-center gap-2 text-white">
       <span className={cn("grid place-items-center rounded-full bg-white text-black", compact ? "h-5 w-5" : "h-6 w-6")}>
-        <img
-          src="/aurora-logo.svg"
+        <Image
+          width={16}
+          height={16}
+          src="/aurora-logo.png"
           alt=""
           aria-hidden="true"
           className={cn("object-contain", compact ? "h-3.5 w-3.5" : "h-4 w-4")}
