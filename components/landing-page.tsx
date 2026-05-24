@@ -536,10 +536,26 @@ function FeatureVisual({ type, isHovered = false }: { type: string; isHovered?: 
         {[180, 144, 108, 72].map((size) => (
           <div key={size} className="absolute rounded-full border border-white/7" style={{ height: size, width: size }} />
         ))}
-        <OrbitDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" angle={252} duration={18} isHovered={isHovered} radius={90} size={16} />
-        <OrbitDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" angle={112} duration={14} isHovered={isHovered} radius={72} size={14} />
-        <OrbitDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" angle={18} duration={11} isHovered={isHovered} radius={54} size={11} />
-        <OrbitDot className="bg-violet-200/90" angle={138} duration={9} isHovered={isHovered} radius={36} size={8} />
+        <motion.div
+          className="absolute inset-0"
+          animate={{ opacity: isHovered ? 0 : 1, scale: isHovered ? 0.96 : 1 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <OrbitDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" angle={252} duration={18} radius={90} size={16} />
+          <OrbitDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" angle={112} duration={14} radius={72} size={14} />
+          <OrbitDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" angle={18} duration={11} radius={54} size={11} />
+          <OrbitDot className="bg-violet-200/90" angle={138} duration={9} radius={36} size={8} />
+        </motion.div>
+        <motion.div
+          className="absolute inset-0"
+          animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 1.04 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <OrbitLaneDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" radius={90} size={16} />
+          <OrbitLaneDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" radius={72} size={14} />
+          <OrbitLaneDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" radius={54} size={11} />
+          <OrbitLaneDot className="bg-violet-200/90" radius={36} size={8} />
+        </motion.div>
         <div className="z-10 grid h-12 w-12 place-items-center rounded-full bg-[#0b0b0b] ring-1 ring-white/10 transition duration-500 group-hover:scale-105">
           <Command className="h-5 w-5 text-white/80" />
         </div>
@@ -602,14 +618,12 @@ function FeatureVisual({ type, isHovered = false }: { type: string; isHovered?: 
 function OrbitDot({
   angle,
   duration,
-  isHovered,
   radius,
   size,
   className,
 }: {
   angle: number;
   duration: number;
-  isHovered: boolean;
   radius: number;
   size: number;
   className?: string;
@@ -617,22 +631,49 @@ function OrbitDot({
   return (
     <motion.span
       className="absolute left-1/2 top-1/2"
-      animate={{ rotate: isHovered ? [0, 360] : [angle, angle + 360] }}
-      transition={{ duration: isHovered ? 7 : duration, repeat: Infinity, ease: "linear" }}
+      animate={{ rotate: [angle, angle + 360] }}
+      transition={{ duration, repeat: Infinity, ease: "linear" }}
     >
       <motion.span
         className={cn("absolute rounded-full", className)}
-        animate={{
-          x: 0,
-          y: -radius,
-          scale: isHovered ? 1.2 : 1,
-        }}
-        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         style={{
           width: size,
           height: size,
           marginLeft: -size / 2,
           marginTop: -size / 2,
+          transform: `translateY(-${radius}px)`,
+        }}
+      />
+    </motion.span>
+  );
+}
+
+function OrbitLaneDot({
+  radius,
+  size,
+  className,
+}: {
+  radius: number;
+  size: number;
+  className?: string;
+}) {
+  return (
+    <motion.span
+      className="absolute left-1/2 top-1/2"
+      animate={{ rotate: [0, 360] }}
+      transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+    >
+      <motion.span
+        className={cn("absolute rounded-full", className)}
+        initial={false}
+        animate={{ scale: 1.16 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          width: size,
+          height: size,
+          marginLeft: -size / 2,
+          marginTop: -size / 2,
+          transform: `translateY(-${radius}px)`,
         }}
       />
     </motion.span>
@@ -645,7 +686,7 @@ function HeroAurora() {
       <motion.svg
         viewBox="0 0 1600 620"
         preserveAspectRatio="none"
-        className="absolute left-1/2 top-[-210px] h-[620px] w-[150vw] min-w-[1500px] -translate-x-1/2 opacity-90"
+        className="absolute left-1/2 top-[-155px] h-[720px] w-[160vw] min-w-[1700px] -translate-x-1/2 opacity-90"
         animate={{ x: ["-5%", "4%", "-3%", "6%", "-5%"], y: ["-4%", "3%", "-2%", "5%", "-4%"], scaleX: [1, 1.08, 0.98, 1.04, 1] }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       >
