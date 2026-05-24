@@ -1,6 +1,7 @@
 "use client";
 
 import Lenis from "lenis";
+import Image from "next/image";
 import {
   Activity,
   CalendarDays,
@@ -9,8 +10,6 @@ import {
   FileText,
   LayoutDashboard,
   Link2,
-  Play,
-  Sparkles,
   Users,
   Zap,
   type LucideIcon,
@@ -120,18 +119,27 @@ export function LandingPage() {
 
 function TopNav() {
   const { scrollY } = useScroll();
-  const width = useTransform(scrollY, [0, 210], ["min(920px, calc(100% - 32px))", "min(760px, calc(100% - 32px))"]);
-  const top = useTransform(scrollY, [0, 210], [20, 14]);
-  const backgroundColor = useTransform(scrollY, [0, 210], ["rgba(16,16,16,0)", "rgba(16,16,16,0.92)"]);
-  const borderColor = useTransform(scrollY, [0, 210], ["rgba(255,255,255,0)", "rgba(255,255,255,0.08)"]);
-  const boxShadow = useTransform(scrollY, [0, 210], ["0 0 0 rgba(0,0,0,0)", "0 24px 80px rgba(0,0,0,0.38)"]);
+  const [isCompact, setIsCompact] = useState(false);
+
+  useEffect(() => {
+    return scrollY.on("change", (latest) => {
+      setIsCompact(latest > 560);
+    });
+  }, [scrollY]);
 
   return (
     <motion.header
       initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.65, ease: "easeOut" }}
-      style={{ width, top, backgroundColor, borderColor, boxShadow }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        width: isCompact ? "min(760px, calc(100% - 32px))" : "min(920px, calc(100% - 32px))",
+        top: isCompact ? 14 : 20,
+        backgroundColor: isCompact ? "rgba(16,16,16,0.94)" : "rgba(16,16,16,0)",
+        borderColor: isCompact ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0)",
+        boxShadow: isCompact ? "0 24px 80px rgba(0,0,0,0.38)" : "0 0 0 rgba(0,0,0,0)",
+      }}
+      transition={{ type: "spring", stiffness: 520, damping: 38, mass: 0.7 }}
       className="fixed left-1/2 z-50 flex -translate-x-1/2 items-center justify-between rounded-xl border px-3 py-2 backdrop-blur-xl"
     >
       <Logo />
@@ -176,11 +184,8 @@ function Hero() {
           Build workflows for launches, sales, content, and support without turning your day into admin.
         </motion.p>
         <motion.div variants={fadeUp} className="mt-7 flex items-center gap-3">
-          <Button className="h-9 rounded-lg px-4 text-xs">
-            Start building <Sparkles className="h-3.5 w-3.5" />
-          </Button>
-          <Button variant="ghost" className="h-9 rounded-lg bg-white text-xs text-black hover:bg-white/90">
-            <Play className="h-3.5 w-3.5 fill-black/10" /> Watch video
+          <Button className="h-9 rounded-lg bg-white px-5 text-xs text-black hover:bg-white/90">
+            Join waitlist
           </Button>
         </motion.div>
       </motion.div>
@@ -604,8 +609,15 @@ function HeroAurora() {
 function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <a href="#" className="flex items-center gap-2 text-white">
-      <span className={cn("grid place-items-center rounded-full bg-white text-black", compact ? "h-5 w-5" : "h-6 w-6")}>
-        <Sparkles className={cn(compact ? "h-3 w-3" : "h-3.5 w-3.5")} />
+      <span className={cn("grid place-items-center overflow-hidden rounded-full bg-white", compact ? "h-5 w-5" : "h-6 w-6")}>
+        <Image
+          width={16}
+          height={16}
+          src="/aurora-logo.png"
+          alt=""
+          aria-hidden="true"
+          className={cn("object-contain brightness-0", compact ? "h-3.5 w-3.5" : "h-4 w-4")}
+        />
       </span>
       <span className={cn("font-display font-medium tracking-[-0.04em]", compact ? "text-sm" : "text-base")}>Aurora</span>
     </a>

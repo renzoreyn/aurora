@@ -1,0 +1,14 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>A Logo</title>
+  <path
+    d="M91 420L225.22 91.54C236.61 63.66 275.39 63.66 286.78 91.54L421 420"
+    stroke="currentColor"
+    stroke-width="76"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+  <path
+    d="M177 318H335"
+    stroke="currentColor"
+    stroke-width="68"
+    stroke-linecap="round"/>
+</svg>
