@@ -1,7 +1,6 @@
 "use client";
 
 import Lenis from "lenis";
-import Image from "next/image";
 import {
   Activity,
   CalendarDays,
@@ -118,29 +117,35 @@ export function LandingPage() {
 }
 
 function TopNav() {
-  const { scrollY } = useScroll();
   const [isCompact, setIsCompact] = useState(false);
 
   useEffect(() => {
-    return scrollY.on("change", (latest) => {
-      setIsCompact(latest > 560);
-    });
-  }, [scrollY]);
+    const updateNav = () => {
+      const threshold = Math.min(window.innerHeight * 0.78, 720);
+      setIsCompact(window.scrollY > threshold);
+    };
+
+    updateNav();
+    window.addEventListener("scroll", updateNav, { passive: true });
+    window.addEventListener("resize", updateNav);
+
+    return () => {
+      window.removeEventListener("scroll", updateNav);
+      window.removeEventListener("resize", updateNav);
+    };
+  }, []);
 
   return (
     <motion.header
       initial={{ opacity: 0, y: -10 }}
-      animate={{
-        opacity: 1,
-        y: 0,
-        width: isCompact ? "min(760px, calc(100% - 32px))" : "min(920px, calc(100% - 32px))",
-        top: isCompact ? 14 : 20,
-        backgroundColor: isCompact ? "rgba(16,16,16,0.94)" : "rgba(16,16,16,0)",
-        borderColor: isCompact ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0)",
-        boxShadow: isCompact ? "0 24px 80px rgba(0,0,0,0.38)" : "0 0 0 rgba(0,0,0,0)",
-      }}
-      transition={{ type: "spring", stiffness: 520, damping: 38, mass: 0.7 }}
-      className="fixed left-1/2 z-50 flex -translate-x-1/2 items-center justify-between rounded-xl border px-3 py-2 backdrop-blur-xl"
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: "easeOut" }}
+      className={cn(
+        "fixed left-1/2 z-50 flex -translate-x-1/2 items-center justify-between rounded-xl border px-3 py-2 backdrop-blur-xl transition-[width,top,background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        isCompact
+          ? "top-3.5 w-[min(760px,calc(100%-32px))] border-white/8 bg-[#101010]/95 shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
+          : "top-5 w-[min(920px,calc(100%-32px))] border-white/0 bg-[#101010]/0 shadow-none",
+      )}
     >
       <Logo />
       <nav className="hidden items-center gap-7 text-[13px] text-white/68 md:flex">
@@ -518,14 +523,21 @@ function FeatureVisual({ type }: { type: string }) {
         <div className="absolute h-32 w-32 rounded-full border border-white/7" />
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-          className="relative h-44 w-44 rounded-full"
+          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+          className="absolute h-48 w-48 rounded-full"
         >
-          <span className="absolute left-3 top-16 h-3 w-3 rounded-full bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)] transition duration-500 group-hover:scale-125" />
-          <span className="absolute right-2 top-8 h-4 w-4 rounded-full bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.6)] transition duration-500 group-hover:-translate-y-1" />
-          <span className="absolute bottom-6 right-10 h-2.5 w-2.5 rounded-full bg-purple-300 transition duration-500 group-hover:translate-x-1" />
+          <OrbitDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" angle={252} radius={96} size={16} />
+          <OrbitDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" angle={112} radius={96} size={14} />
         </motion.div>
-        <div className="z-10 grid h-12 w-12 place-items-center rounded-full bg-[#0b0b0b] ring-1 ring-white/10">
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+          className="absolute h-32 w-32 rounded-full"
+        >
+          <OrbitDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" angle={18} radius={64} size={11} />
+          <OrbitDot className="bg-violet-200/90" angle={138} radius={64} size={8} />
+        </motion.div>
+        <div className="z-10 grid h-12 w-12 place-items-center rounded-full bg-[#0b0b0b] ring-1 ring-white/10 transition duration-500 group-hover:scale-105">
           <Command className="h-5 w-5 text-white/80" />
         </div>
       </div>
@@ -584,6 +596,33 @@ function FeatureVisual({ type }: { type: string }) {
   );
 }
 
+function OrbitDot({
+  angle,
+  radius,
+  size,
+  className,
+}: {
+  angle: number;
+  radius: number;
+  size: number;
+  className?: string;
+}) {
+  const radians = (angle * Math.PI) / 180;
+  const x = Math.cos(radians) * radius;
+  const y = Math.sin(radians) * radius;
+
+  return (
+    <span
+      className={cn("absolute left-1/2 top-1/2 rounded-full transition duration-500 group-hover:scale-125", className)}
+      style={{
+        width: size,
+        height: size,
+        transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+      }}
+    />
+  );
+}
+
 function HeroAurora() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[660px] overflow-hidden">
@@ -609,18 +648,33 @@ function HeroAurora() {
 function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <a href="#" className="flex items-center gap-2 text-white">
-      <span className={cn("grid place-items-center overflow-hidden rounded-full bg-white", compact ? "h-5 w-5" : "h-6 w-6")}>
-        <Image
-          width={16}
-          height={16}
-          src="/aurora-logo.png"
-          alt=""
-          aria-hidden="true"
-          className={cn("object-contain brightness-0", compact ? "h-3.5 w-3.5" : "h-4 w-4")}
-        />
+      <span className={cn("grid place-items-center rounded-full bg-white text-black", compact ? "h-5 w-5" : "h-6 w-6")}>
+        <LogoMark className={cn(compact ? "h-3.5 w-3.5" : "h-4 w-4")} />
       </span>
       <span className={cn("font-display font-medium tracking-[-0.04em]", compact ? "text-sm" : "text-base")}>Aurora</span>
     </a>
+  );
+}
+
+function LogoMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 512 512" aria-hidden="true" className={className}>
+      <path
+        d="M91 420L225.22 91.54C236.61 63.66 275.39 63.66 286.78 91.54L421 420"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="76"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M177 318H335"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="68"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
 
