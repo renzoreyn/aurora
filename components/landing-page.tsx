@@ -296,17 +296,18 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer className="relative z-10 px-4 pb-16 pt-8">
-      <div className="mx-auto grid max-w-[980px] gap-12 border-t border-white/0 pt-2 sm:grid-cols-[1fr_1fr]">
-        <div>
-          <Logo />
-          <p className="mt-24 text-xs leading-5 text-white/28">© 2026 Aurora. All rights reserved.</p>
-        </div>
-        <div className="grid grid-cols-3 gap-8 text-xs">
-          <FooterColumn title="Product" links={["Blog", "Changelog", "Pricing"]} />
-          <FooterColumn title="Company" links={["About", "Contact"]} />
-          <FooterColumn title="Legal" links={["Terms", "Privacy"]} />
-        </div>
+    <footer className="relative z-10 px-4 pb-14 pt-8">
+      <div className="mx-auto flex max-w-[980px] flex-col gap-5 border-t border-white/8 pt-6 text-xs text-white/34 sm:flex-row sm:items-center sm:justify-between">
+        <Logo compact />
+        <a
+          href="https://renzoreyn.dev"
+          target="_blank"
+          rel="noreferrer"
+          className="transition hover:text-white"
+        >
+          mock-product by @Renzoreyn
+        </a>
+        <p>© 2026 Aurora.</p>
       </div>
     </footer>
   );
@@ -532,12 +533,13 @@ function FeatureVisual({ type, isHovered = false }: { type: string; isHovered?: 
   if (type === "orbit") {
     return (
       <div className="absolute inset-x-0 top-0 flex h-52 items-center justify-center overflow-hidden">
-        <div className="absolute h-48 w-48 rounded-full border border-white/7" />
-        <div className="absolute h-32 w-32 rounded-full border border-white/7" />
-        <OrbitDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" angle={252} duration={18} hoverX={-42} isHovered={isHovered} radius={88} size={16} />
-        <OrbitDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" angle={112} duration={14} hoverX={-14} isHovered={isHovered} radius={88} size={14} />
-        <OrbitDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" angle={18} duration={11} hoverX={14} isHovered={isHovered} radius={58} size={11} />
-        <OrbitDot className="bg-violet-200/90" angle={138} duration={9} hoverX={42} isHovered={isHovered} radius={58} size={8} />
+        {[180, 144, 108, 72].map((size) => (
+          <div key={size} className="absolute rounded-full border border-white/7" style={{ height: size, width: size }} />
+        ))}
+        <OrbitDot className="bg-fuchsia-200 shadow-[0_0_20px_rgba(245,208,254,0.72)]" angle={252} duration={18} isHovered={isHovered} radius={90} size={16} />
+        <OrbitDot className="bg-violet-300 shadow-[0_0_20px_rgba(196,181,253,0.75)]" angle={112} duration={14} isHovered={isHovered} radius={72} size={14} />
+        <OrbitDot className="bg-purple-300 shadow-[0_0_16px_rgba(216,180,254,0.66)]" angle={18} duration={11} isHovered={isHovered} radius={54} size={11} />
+        <OrbitDot className="bg-violet-200/90" angle={138} duration={9} isHovered={isHovered} radius={36} size={8} />
         <div className="z-10 grid h-12 w-12 place-items-center rounded-full bg-[#0b0b0b] ring-1 ring-white/10 transition duration-500 group-hover:scale-105">
           <Command className="h-5 w-5 text-white/80" />
         </div>
@@ -600,7 +602,6 @@ function FeatureVisual({ type, isHovered = false }: { type: string; isHovered?: 
 function OrbitDot({
   angle,
   duration,
-  hoverX,
   isHovered,
   radius,
   size,
@@ -608,7 +609,6 @@ function OrbitDot({
 }: {
   angle: number;
   duration: number;
-  hoverX: number;
   isHovered: boolean;
   radius: number;
   size: number;
@@ -617,14 +617,14 @@ function OrbitDot({
   return (
     <motion.span
       className="absolute left-1/2 top-1/2"
-      animate={{ rotate: isHovered ? 0 : [angle, angle + 360] }}
-      transition={isHovered ? { duration: 0.45, ease: [0.16, 1, 0.3, 1] } : { duration, repeat: Infinity, ease: "linear" }}
+      animate={{ rotate: isHovered ? [0, 360] : [angle, angle + 360] }}
+      transition={{ duration: isHovered ? 7 : duration, repeat: Infinity, ease: "linear" }}
     >
       <motion.span
         className={cn("absolute rounded-full", className)}
         animate={{
-          x: isHovered ? hoverX : 0,
-          y: isHovered ? 0 : -radius,
+          x: 0,
+          y: -radius,
           scale: isHovered ? 1.2 : 1,
         }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
@@ -702,33 +702,16 @@ function HeroAurora() {
 function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <a href="#" className="flex items-center gap-2 text-white">
-      <span className={cn("grid place-items-center rounded-full bg-white text-black", compact ? "h-5 w-5" : "h-6 w-6")}>
-        <Image
-          width={16}
-          height={16}
-          src="/aurora-logo.png"
-          alt=""
-          aria-hidden="true"
-          className={cn("object-contain", compact ? "h-3.5 w-3.5" : "h-4 w-4")}
-        />
-      </span>
+      <Image
+        width={24}
+        height={24}
+        src="/aurora-logo.png"
+        alt=""
+        aria-hidden="true"
+        className={cn("object-contain", compact ? "h-5 w-5" : "h-6 w-6")}
+      />
       <span className={cn("font-display font-medium tracking-[-0.04em]", compact ? "text-sm" : "text-base")}>Aurora</span>
     </a>
-  );
-}
-
-function FooterColumn({ title, links }: { title: string; links: string[] }) {
-  return (
-    <div>
-      <p className="mb-4 font-medium text-white/72">{title}</p>
-      <div className="space-y-3 text-white/36">
-        {links.map((link) => (
-          <a key={link} href="#" className="block transition hover:text-white/72">
-            {link}
-          </a>
-        ))}
-      </div>
-    </div>
   );
 }
 
