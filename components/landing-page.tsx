@@ -627,21 +627,27 @@ function OrbitDot({
       transition={{ duration, repeat: Infinity, ease: "linear" }}
     >
       <motion.span
-        className={cn("absolute rounded-full", className)}
-        animate={{
-          backgroundColor: isHovered ? "rgb(196 181 253)" : undefined,
-          boxShadow: isHovered ? "0 0 22px rgba(196,181,253,0.78)" : undefined,
-          scale: isHovered ? 1.12 : 1,
-        }}
-        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute"
         style={{
-          width: size,
-          height: size,
           marginLeft: -size / 2,
           marginTop: -size / 2,
           transform: `translateY(-${radius}px)`,
         }}
-      />
+      >
+        <motion.span
+          className={cn("block rounded-full", className)}
+          animate={{
+            backgroundColor: isHovered ? "rgb(196 181 253)" : undefined,
+            boxShadow: isHovered ? "0 0 22px rgba(196,181,253,0.78)" : undefined,
+            scale: isHovered ? 1.12 : 1,
+          }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            width: size,
+            height: size,
+          }}
+        />
+      </motion.span>
     </motion.span>
   );
 }
