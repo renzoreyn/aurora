@@ -453,7 +453,7 @@ function DashboardPageContent({ activePage }: { activePage: DashboardPage }) {
   if (activePage === "Team") {
     return (
       <motion.div key="team" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="rounded-lg border border-white/7 bg-[#151515] p-4">
-        {["Mia edits content flows", "Ren handles launch ops", "Jay watches analytics", "Noor reviews customers"].map((item, index) => (
+        {["Rae edits content flows", "Ren handles launch ops", "Ada watches analytics", "Akira reviews customers"].map((item, index) => (
           <div key={item} className="mb-3 flex items-center gap-3 rounded-md bg-black/26 p-3 text-[12px] text-white/54">
             <span className="grid h-8 w-8 place-items-center rounded-full bg-violet-300/12 text-violet-100">{item[0]}</span>
             <div>
